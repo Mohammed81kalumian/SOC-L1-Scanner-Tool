@@ -1,0 +1,4 @@
+.env
+scan_log.txt
+venv/
+__pycache__/
