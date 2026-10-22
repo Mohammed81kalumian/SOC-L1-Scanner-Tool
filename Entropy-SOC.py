@@ -10,7 +10,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 
-
+API_KEY = "1234567890SECRETKEY"
 
 
 load_dotenv()
