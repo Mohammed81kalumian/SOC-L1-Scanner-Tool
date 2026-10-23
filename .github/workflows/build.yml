@@ -1,25 +1,23 @@
-name: SonarQube Cloud Security Scan
+name: SonarCloud Security Scan
 
 on:
   push:
     branches:
       - main
-      - master
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
   sonarcloud:
-    name: SonarQube Cloud Scan
+    name: SonarCloud Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # مطلوبة عشان SonarCloud يقرأ تاريخ التعديلات بدقة
 
-      - name: SonarQube Cloud Scan
-        uses: SonarSource/sonarqube-scan-action@v3.0.0
+      - name: SonarQube Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # مطلوب لتسهيل التحليل
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # التوكن السري الخاص بمشروعك
