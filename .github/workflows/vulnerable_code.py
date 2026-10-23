@@ -1,20 +1,27 @@
 import os
+import subprocess
 import sqlite3
 
-# 1. Hardcoded Secret / Credentials (ثغرة تسريب مفتاح/كلمة سر)
-API_SECRET_KEY = "sk_live_99887766554433221100_SECRET"
-DATABASE_PASSWORD = "AdminPassword123!"
+# 1. Hardcoded Plaintext Credentials & Secrets (Security Hotspot)
+API_SECRET_KEY = "sk_live_998877665544332211"
+ADMIN_PASSWORD = "Password12345!"
 
-# 2. Command Injection (ثغرة تنفيذ أوامر النظام)
-def run_system_ping(user_input):
-    # استخدام os.system مع مدخلات مباشرة من المستخدم
-    os.system("ping -c 1 " + user_input)
+# 2. Command Injection (Vulnerability)
+def run_user_cmd(user_input):
+    # Executing raw command with shell=True
+    subprocess.call("ping -c 1 " + user_input, shell=True)
 
-# 3. SQL Injection (ثغرة استعلامات دمج الأوامر)
-def get_user_data(username):
-    conn = sqlite3.connect("users.db")
+# 3. SQL Injection (Vulnerability)
+def get_user_data(user_id):
+    conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
-    # استعلام SQL غير آمن ومدمج بنصوص مباشرة
-    query = f"SELECT * FROM users WHERE username = '{username}'"
+    # Unsanitized string concatenation into SQL query
+    query = "SELECT * FROM users WHERE id = '" + user_id + "'"
     cursor.execute(query)
     return cursor.fetchall()
+
+# 4. Weak Hashing / Insecure Cryptography
+import hashlib
+def hash_pass(password):
+    # Using insecure MD5 hashing
+    return hashlib.md5(password.encode()).hexdigest()
